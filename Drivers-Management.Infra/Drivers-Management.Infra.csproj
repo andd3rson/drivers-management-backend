@@ -4,11 +4,15 @@
     <ProjectReference Include="..\Drivers-Management.Domain\Drivers-Management.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Drivers_Management.Infra</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>Disable</Nullable>
   </PropertyGroup>
 
 </Project>
