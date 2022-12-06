@@ -11,4 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Drivers-Management.Domain\Drivers-Management.Domain.csproj" />
+    <ProjectReference Include="..\Drivers-Management.Infra\Drivers-Management.Infra.csproj" />
+  </ItemGroup>
+
 </Project>
