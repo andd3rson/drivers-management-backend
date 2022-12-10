@@ -18,11 +18,13 @@ namespace Drivers_Management.Infra.Mappings
                .HasColumnType("varchar(20)")
               .IsRequired();
 
-            builder.Property(x => x.CreatedAt)
-                .ValueGeneratedOnAdd();
+            // builder.Property(x => x.CreatedAt)
+            //     .ValueGeneratedOnAdd()
+            //     .HasValueGenerator(typeof(DateTime));
 
-            builder.Property(x => x.UpdateAt)
-                    .ValueGeneratedOnUpdate();
+            // builder.Property(x => x.UpdateAt)
+            //         .ValueGeneratedOnUpdate();
+
         }
     }
 }
