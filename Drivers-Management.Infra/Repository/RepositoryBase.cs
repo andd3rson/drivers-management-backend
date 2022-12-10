@@ -14,10 +14,11 @@ namespace Drivers_Management.Infra.Repository
             _context = context;
         }
 
-        public async Task<int> Create(T entity)
+        public async Task<T> Create(T entity)
         {
             _context.Set<T>().Add(entity);
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()

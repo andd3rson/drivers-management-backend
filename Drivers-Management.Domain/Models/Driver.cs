@@ -5,7 +5,8 @@ namespace Drivers_Management.Domain.Models
         public string Name { get; set; }
         public string Cpf { get; set; }
 
-        public ICollection<Vehicle> Vehicles { get; set; }
+        public string Email { get; set; }
+        public IEnumerable<Vehicle> Vehicles { get; set; }
 
     }
 }
