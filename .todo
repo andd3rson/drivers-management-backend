@@ -3,7 +3,7 @@ Sunday - Just 1h30 hour to code.
         BeforeAll: 
             [x] create a domain exception.
         Create: 
-            [] to implement OneOf
+            [x] to implement OneOf
             [] to validate cpf.
         GetAll: 
             [] It doesn't necessary return all, to implemented pagination.

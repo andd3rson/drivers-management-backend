@@ -1,4 +1,6 @@
 using Drivers_Management.Domain.Models;
+using Drivers_Management.Domain.Utils;
+using OneOf;
 
 namespace Drivers_Management.Domain.Contracts.Services
 {
@@ -6,6 +8,6 @@ namespace Drivers_Management.Domain.Contracts.Services
     {
         Task<IEnumerable<Driver>> GetAllAsync();
         Task<Driver> GetByCpfAsync(int cpf);
-        Task<Guid> AddAsync(Driver driver);
+        Task<OneOf<DomainExceptions, Guid>> AddAsync(Driver driver);
     }
 }
