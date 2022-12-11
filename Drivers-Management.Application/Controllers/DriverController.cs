@@ -19,7 +19,9 @@ namespace Drivers_Management.Application.Controllers
         public async Task<IActionResult> Post(Driver driver)
         {
             var result = await _driverServices.AddAsync(driver);
-            return Ok();
+            if (result.IsT0)
+                return BadRequest(result.AsT0.Data);
+            return Ok(result.Value);
         }
 
         /* TODO: 
