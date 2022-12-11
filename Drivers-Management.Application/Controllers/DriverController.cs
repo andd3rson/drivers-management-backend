@@ -5,7 +5,7 @@ using Drivers_Management.Domain.Models;
 namespace Drivers_Management.Application.Controllers
 {
     [ApiController]
-    [Route("driver")]
+    [Route("drivers")]
     public class DriverController : ControllerBase
     {
         private readonly IDriverServices _driverServices;
@@ -18,13 +18,19 @@ namespace Drivers_Management.Application.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(Driver driver)
         {
-            return Ok(await _driverServices.AddAsync(driver));
+            var result = await _driverServices.AddAsync(driver);
+            return Ok();
         }
-        
+
+        /* TODO: 
+            * Create a pagination filter class to received pageSize and pageNumber params.
+            * Create a Custom page response for every class.
+
+        */
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
         {
-            return Ok(await _driverServices.GetAllAsync());
+            return Ok(await _driverServices.GetAllAsync(pageNumber, pageSize));
         }
     }
 }
