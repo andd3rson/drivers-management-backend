@@ -1,7 +1,7 @@
 Sunday - Just 1h30 hour to code.
     Must finish Driver services:
         BeforeAll: 
-            [] create a domain exception.
+            [x] create a domain exception.
         Create: 
             [] to implement OneOf
             [] to validate cpf.

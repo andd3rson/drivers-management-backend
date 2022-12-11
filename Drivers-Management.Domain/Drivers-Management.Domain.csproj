@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.4.0" />
+    <PackageReference Include="OneOf" Version="3.0.223" />
   </ItemGroup>
 
 </Project>
