@@ -28,7 +28,6 @@ namespace Drivers_Management.Application.Controllers
         /* TODO: 
             * Create a pagination filter class to received pageSize and pageNumber params.
             * Create a Custom page response for every class.
-
         */
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)

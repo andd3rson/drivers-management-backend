@@ -10,5 +10,10 @@ namespace Drivers_Management.Infra.Repository
         {
 
         }
+
+        public async Task<Driver> GetByCpfAsync(string cpf)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace Drivers_Management.Infra.Repository
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<bool> Update(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync() > 0;

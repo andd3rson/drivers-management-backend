@@ -8,5 +8,11 @@ namespace Drivers_Management.Domain.Models
         public string Email { get; set; }
         public IEnumerable<Vehicle> Vehicles { get; set; }
 
+
+        public void ToUpdate(Driver driver)
+        {
+            Name = driver.Name;
+            Email = driver.Email;
+        }
     }
 }
