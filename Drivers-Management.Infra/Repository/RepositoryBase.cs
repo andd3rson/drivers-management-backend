@@ -21,9 +21,12 @@ namespace Drivers_Management.Infra.Repository
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(int take, int skip)
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>()
+                                 .Take(take)
+                                 .Skip(skip)
+                                 .ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)

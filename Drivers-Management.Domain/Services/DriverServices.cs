@@ -26,9 +26,10 @@ namespace Drivers_Management.Domain.Services
             return (await _drivers.Create(driver)).Id;
         }
 
-        public async Task<IEnumerable<Driver>> GetAllAsync()
+        public async Task<IEnumerable<Driver>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _drivers.GetAllAsync();
+            int skip = pageNumber > 0 ? (pageNumber - 1) * pageNumber : 0;
+            return await _drivers.GetAllAsync(pageSize, skip);
         }
 
         public Task<Driver> GetByCpfAsync(int cpf)
