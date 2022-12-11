@@ -1,6 +1,6 @@
-Sunday - Just 1h30 hour to code.
+Sunday(11/Dez) - Just 1h30 hour for coding.
     Must finish Driver services:
-        BeforeAll: 
+        BeforeAll:  
             [x] create a domain exception.
         Create: 
             [x] to implement OneOf
@@ -9,7 +9,24 @@ Sunday - Just 1h30 hour to code.
             [x] It doesn't necessary return all, to implemented pagination.
         Remaing Methods: 
             to implement remaining methods like 
-                [] Update.
-                [] To find by cpf .
+                [x] Update.
+                [x] To find by cpf .
 
-                
+Monday (12/Dez) - Just 40 min. for coding.
+        [] get all vehicle
+        [] get by plate
+        [] create vehicle
+        [] update vehicle
+
+
+Tursday (13/Dez) - Just 30 min. for coding.               
+        create a service 
+            [] start implement custom data returns
+
+
+Saturday/Sunday (17-18/Dez) - 3 hours for coding.
+            [] to vinculate vehicle and driver.
+            [] to create unit tests
+            [] implement CI using github actions.
+
+             
