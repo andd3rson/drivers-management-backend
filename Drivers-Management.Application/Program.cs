@@ -24,6 +24,7 @@ builder.Services
 builder.Services.AddScoped<IValidator<Driver>, DriverValidator>();
 builder.Services.AddScoped<IValidator<Vehicle>, VehicleValidator>();
 builder.Services.AddScoped<IDriverServices, DriverServices>();
+builder.Services.AddScoped<IVehicleServices, VehicleServices>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddEndpointsApiExplorer();

@@ -21,9 +21,12 @@ namespace Drivers_Management.Infra.Repository
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(int pageSize, int pageNumber)
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>()
+                                 .Skip((pageNumber - 1) * pageSize)
+                                 .Take(pageSize)
+                                 .ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)
@@ -31,7 +34,7 @@ namespace Drivers_Management.Infra.Repository
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<bool> Update(T entity)
+        public async Task<bool> UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync() > 0;

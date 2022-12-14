@@ -1,7 +1,9 @@
 using Drivers_Management.Domain.Contracts.Repository;
 using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
+using Drivers_Management.Domain.Utils;
 using FluentValidation;
+using OneOf;
 
 namespace Drivers_Management.Domain.Services
 {
@@ -15,28 +17,37 @@ namespace Drivers_Management.Domain.Services
             _validator = validator;
         }
 
-        // TO DO: Implement OneOf(,). It will be better in case any error ocurrs.
-        public async Task<Guid> AddAsync(Driver driver)
+        public async Task<OneOf<DomainExceptions, Guid>> AddAsync(Driver driver)
         {
-            if (!(await _validator.ValidateAsync(driver)).IsValid)
-            {
-                // TO DO: Add a domain exception class.
-                return Guid.Empty;
-            }
+            var validateModel = await _validator.ValidateAsync(driver);
+            if (!validateModel.IsValid)
+                return new DomainExceptions("Sorry, something went wrong. Try again later.");
             driver.CreatedAt = DateTime.UtcNow;
-            var result = await _drivers.Create(driver);
-            return result.Id;
+            return (await _drivers.Create(driver)).Id;
         }
 
-        public async Task<IEnumerable<Driver>> GetAllAsync()
+        public async Task<IEnumerable<Driver>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _drivers.GetAllAsync();
+            pageNumber = pageNumber < 1 ? 1 : pageNumber;
+            return await _drivers.GetAllAsync(pageSize, pageNumber);
         }
 
-        public  Task<Driver> GetByCpfAsync(int cpf)
+        public async Task<bool> UpdateAsync(Driver driver)
         {
-            throw new NotImplementedException();
+            var validateModel = await _validator.ValidateAsync(driver);
+            var exists = await _drivers.GetByCpfAsync(driver.Cpf);
+
+            if (exists is null)
+                return false;
+            exists.ToUpdate(driver);
+            return await _drivers.UpdateAsync(exists);
         }
+        
+        public async Task<Driver> GetByCpfAsync(string cpf)
+        {
+            return await _drivers.GetByCpfAsync(cpf);
+        }
+
 
     }
 }
