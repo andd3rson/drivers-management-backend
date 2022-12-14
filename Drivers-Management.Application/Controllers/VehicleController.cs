@@ -1,3 +1,4 @@
+using Drivers_Management.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Drivers_Management.Application.Controllers
@@ -6,7 +7,7 @@ namespace Drivers_Management.Application.Controllers
     [Route("vehicle")]
     public class VehicleController : ControllerBase
     {
-        
+
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -15,6 +16,7 @@ namespace Drivers_Management.Application.Controllers
         [HttpGet("plate")]
         public async Task<IActionResult> GetByPlateAsync([FromQuery] string plate)
         {
+            
             return Ok();
         }
         // TODO : One of the last things to implement 
@@ -25,7 +27,7 @@ namespace Drivers_Management.Application.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync()
+        public async Task<IActionResult> PostAsync([FromBody] VehiclesRequest vehicle)
         {
             return Ok();
         }
