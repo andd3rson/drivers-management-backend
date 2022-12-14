@@ -11,23 +11,21 @@ namespace Drivers_Management.Domain.Validators
                 .NotNull();
 
             RuleFor(x => x.Plate)
-                .MustAsync(isValid)
+                .Matches("[a-zA-Z]{3}[0-9]{4}")
                 .NotEmpty()
                 .NotNull();
             RuleFor(x => x.Year)
                 .MaximumLength(4)
-                .MustAsync(isAvalidYear);
+                .Must(isValidYear);
 
         }
 
-        private async Task<bool> isAvalidYear(string arg1, CancellationToken arg2)
+        // TODO: 
+        private bool isValidYear(string year)
         {
             return true;
         }
 
-        private async Task<bool> isValid(string arg1, CancellationToken arg2)
-        {
-            return true;
-        }
+      
     }
 }

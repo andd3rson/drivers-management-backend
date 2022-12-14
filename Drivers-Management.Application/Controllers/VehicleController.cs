@@ -16,8 +16,8 @@ namespace Drivers_Management.Application.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-            => Ok(await _vehicleServices.GetAllAsync());
+        public async Task<IActionResult> GetAllAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
+            => Ok(await _vehicleServices.GetAllAsync(pageNumber, pageSize));
 
         [HttpGet("plate")]
         public async Task<IActionResult> GetByPlateAsync([FromQuery] string plate)

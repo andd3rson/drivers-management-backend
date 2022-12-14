@@ -13,10 +13,10 @@ Sunday(11/Dez) - Just 1h30 hour for coding.
                 [x] To find by cpf .
 
 Monday (12/Dez) - Just 40 min. for coding.
-        [] get all vehicle
-        [] get by plate
-        [] create vehicle
-        [] update vehicle
+        [x] get all vehicle
+        [x] get by plate
+        [x] create vehicle
+        [x] update vehicle
 
 
 Tursday (13/Dez) - Just 30 min. for coding.               
@@ -25,8 +25,9 @@ Tursday (13/Dez) - Just 30 min. for coding.
 
 
 Saturday/Sunday (17-18/Dez) - 3 hours for coding.
+            [] add automapper
             [] to vinculate vehicle and driver.
-            [] to create unit tests
             [] implement CI using github actions.
+            [] to create unit tests
 
              
