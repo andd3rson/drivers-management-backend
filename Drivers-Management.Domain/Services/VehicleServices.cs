@@ -33,7 +33,7 @@ namespace Drivers_Management.Domain.Services
 
         public async Task<Vehicle> GetByPlateAsync(string plate)
         {
-            var regex = new Regex("[a-zA-Z]{3}[0-9]{4}");
+            var regex = new Regex("[a-zA-Z]");
             if (!regex.IsMatch(plate))
             {
                 throw new DomainExceptions();
@@ -41,7 +41,7 @@ namespace Drivers_Management.Domain.Services
             return await _vehicle.GetByPlateAsync(plate);
         }
 
-        public async Task<OneOf<DomainExceptions, Guid>> PostAsyncllAsync(Vehicle vehicle)
+        public async Task<OneOf<DomainExceptions, int>> PostAsyncllAsync(Vehicle vehicle)
         {
             var validateModel = await _validator.ValidateAsync(vehicle);
             if (!validateModel.IsValid)
@@ -58,6 +58,11 @@ namespace Drivers_Management.Domain.Services
                 return false;
             exists.ToUpdate(vehicle);
             return await _vehicle.UpdateAsync(exists);
+        }
+
+        public async Task<Vehicle> GetByIdAsync(int id)
+        {
+            return await _vehicle.GetByIdAsync(id);
         }
     }
 }

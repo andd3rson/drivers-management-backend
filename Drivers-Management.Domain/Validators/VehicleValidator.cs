@@ -11,7 +11,7 @@ namespace Drivers_Management.Domain.Validators
                 .NotNull();
 
             RuleFor(x => x.Plate)
-                .Matches("[a-zA-Z]{3}[0-9]{4}")
+                .Matches("[a-zA-Z]")
                 .NotEmpty()
                 .NotNull();
             RuleFor(x => x.Year)

@@ -44,9 +44,20 @@ namespace Drivers_Management.Application.Controllers
             return Ok(result.Value);
         }
 
-        
+        [HttpPost("join")]
+        public async Task<IActionResult> PostVinculatAsync([FromQuery] int idDriver, [FromQuery] int idVehicle)
+        {
+            bool t = await _driverServices.Vinculate(idDriver, idVehicle);
+
+            return Ok(new
+            {
+                idDriver,
+                idVehicle
+            });
+        }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Driver driver)
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] Driver driver)
         {
             if (id != driver.Id)
                 return BadRequest();

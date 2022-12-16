@@ -19,17 +19,9 @@ namespace Drivers_Management.Infra.Mappings
                  .HasColumnType("varchar(50)")
                 .IsRequired();
 
-            // builder.Property(x => x.CreatedAt)
-            //     .ValueGeneratedOnAdd()
-            //     .HasValueGenerator(typeof(DateTime));
-
-            // builder.Property(x => x.UpdateAt)
-            //         .ValueGeneratedOnUpdate();
-
             builder.Ignore(x => x.Vehicles);
 
-            builder.HasMany(x => x.Vehicles)
-                    .WithMany(x => x.Drivers);
+           
 
         }
     }

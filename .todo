@@ -25,7 +25,7 @@ Tursday (13/Dez) - Just 30 min. for coding.
 
 
 Saturday/Sunday (17-18/Dez) - 3 hours for coding.
-            [] add automapper
+            [x] add automapper
             [] to vinculate vehicle and driver.
             [] implement CI using github actions.
             [] to create unit tests

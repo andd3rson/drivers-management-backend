@@ -29,7 +29,7 @@ namespace Drivers_Management.Infra.Repository
                                  .ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(Guid id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
