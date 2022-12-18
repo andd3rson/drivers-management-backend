@@ -1,7 +1,7 @@
 using Drivers_Management.Application.Dtos;
 using Drivers_Management.Domain.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
-
+using AutoMapper;
 namespace Drivers_Management.Application.Controllers
 {
     [ApiController]
@@ -10,9 +10,11 @@ namespace Drivers_Management.Application.Controllers
     {
         // TODO: Implement Automapper
         private readonly IVehicleServices _vehicleServices;
-        public VehicleController(IVehicleServices vehicleServices)
+        private readonly IMapper _mapper;
+        public VehicleController(IVehicleServices vehicleServices, IMapper mapper)
         {
             _vehicleServices = vehicleServices;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -32,16 +34,15 @@ namespace Drivers_Management.Application.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] VehiclesRequest vehicle)
         {
-
-            return Ok();
+            var vehicleMapper = _mapper.Map<Domain.Models.Vehicle>(vehicle);
+            var id = await _vehicleServices.PostAsyncllAsync(vehicleMapper);
+            return Ok(id.IsT1);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateAsync()
         {
             return NoContent();
         }
-
-
 
     }
 }

@@ -9,7 +9,7 @@ namespace Drivers_Management.Infra.Context
          : base(opt)
         {
 
-        
+
         }
 
 
@@ -19,6 +19,8 @@ namespace Drivers_Management.Infra.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DriverManagementDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
         }

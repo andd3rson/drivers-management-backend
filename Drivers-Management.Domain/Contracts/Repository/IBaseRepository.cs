@@ -6,7 +6,7 @@ namespace Drivers_Management.Domain.Contracts.Repository
     {
         Task<IEnumerable<TEntity>> GetAllAsync(int take, int skip);
 
-        Task<TEntity> GetByIdAsync(Guid id);
+        Task<TEntity> GetByIdAsync(int id);
         Task<TEntity> Create(TEntity entity);
         Task<bool> UpdateAsync(TEntity entity);
 

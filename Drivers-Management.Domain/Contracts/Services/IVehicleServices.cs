@@ -9,7 +9,9 @@ namespace Drivers_Management.Domain.Contracts.Services
         Task<Vehicle> GetByPlateAsync(string plate);
         Task<IEnumerable<Vehicle>> GetAllAsync(int pageNumber, int pageSize);
         Task<IEnumerable<Vehicle>> GetByAdvancedFilterAsync();
-        Task<OneOf<DomainExceptions, Guid>> PostAsyncllAsync(Vehicle vehicle);
+        Task<OneOf<DomainExceptions, int>> PostAsyncllAsync(Vehicle vehicle);
         Task<bool> UpdateAsync(Vehicle vehicle);
+        
+        Task<Vehicle> GetByIdAsync(int id);
     }
 }
