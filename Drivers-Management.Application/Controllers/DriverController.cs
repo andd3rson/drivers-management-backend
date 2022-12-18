@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
+using Drivers_Management.Application.Dtos;
+using AutoMapper;
 
 namespace Drivers_Management.Application.Controllers
 {
@@ -9,9 +11,11 @@ namespace Drivers_Management.Application.Controllers
     public class DriverController : ControllerBase
     {
         private readonly IDriverServices _driverServices;
-        public DriverController(IDriverServices driverServices)
+        private readonly IMapper _mapper;
+        public DriverController(IDriverServices driverServices, IMapper mapper)
         {
             _driverServices = driverServices;
+            _mapper = mapper;
         }
 
         /* TODO: 
@@ -36,12 +40,15 @@ namespace Drivers_Management.Application.Controllers
 
         // TODO: Change return to 201 returns
         [HttpPost]
-        public async Task<IActionResult> PostAsync(Driver driver)
+        public async Task<IActionResult> PostAsync(DriverRequest driverRequest)
         {
-            var result = await _driverServices.AddAsync(driver);
-            if (result.IsT0)
-                return BadRequest(result.AsT0.Data);
-            return Ok(result.Value);
+            var driverMapped = _mapper.Map<Driver>(driverRequest);
+
+            var result = await _driverServices.CreateAsync(driverMapped);
+            if (!result.Item2)
+                return BadRequest();
+
+            return Created("/", result.Item1.Id);
         }
 
         [HttpPost("join")]
@@ -49,11 +56,7 @@ namespace Drivers_Management.Application.Controllers
         {
             bool t = await _driverServices.Vinculate(idDriver, idVehicle);
 
-            return Ok(new
-            {
-                idDriver,
-                idVehicle
-            });
+            return t ? Ok() : BadRequest();
         }
 
         [HttpPut("{id}")]

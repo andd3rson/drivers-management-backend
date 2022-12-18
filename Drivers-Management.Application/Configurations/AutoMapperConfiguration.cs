@@ -9,6 +9,9 @@ namespace Drivers_Management.Application.Configurations
         public AutoMapperConfiguration()
         {
             CreateMap<VehiclesRequest, Vehicle>().ReverseMap();
+            CreateMap<DriverRequest, Driver>().ReverseMap();
+
+
         }
     }
 }

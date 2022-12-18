@@ -11,6 +11,7 @@ namespace Drivers_Management.Infra.Mappings
             modelBuilder
                    .HasKey(bc => new { bc.DriversId, bc.VehiclesId });
 
+            
             modelBuilder
                 .HasOne(bc => bc.Drivers)
                 .WithMany(b => b.Vehicles)

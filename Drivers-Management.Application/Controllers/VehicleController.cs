@@ -2,6 +2,8 @@ using Drivers_Management.Application.Dtos;
 using Drivers_Management.Domain.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Drivers_Management.Domain.Models;
+
 namespace Drivers_Management.Application.Controllers
 {
     [ApiController]
@@ -34,9 +36,11 @@ namespace Drivers_Management.Application.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] VehiclesRequest vehicle)
         {
-            var vehicleMapper = _mapper.Map<Domain.Models.Vehicle>(vehicle);
-            var id = await _vehicleServices.PostAsyncllAsync(vehicleMapper);
-            return Ok(id.IsT1);
+            var request = await _vehicleServices.CreateAsync(_mapper.Map<Vehicle>(vehicle));
+            if (!request.Item2)
+                return BadRequest();
+
+            return Created("/", request.Item1.Id);
         }
         [HttpPut]
         public async Task<IActionResult> UpdateAsync()

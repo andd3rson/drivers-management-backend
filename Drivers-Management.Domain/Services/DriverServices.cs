@@ -19,13 +19,14 @@ namespace Drivers_Management.Domain.Services
             _vehicleService = vehicleService;
         }
 
-        public async Task<OneOf<DomainExceptions, int>> AddAsync(Driver driver)
+        public async Task<(Driver, bool)> CreateAsync(Driver driver)
         {
             var validateModel = await _validator.ValidateAsync(driver);
             if (!validateModel.IsValid)
-                return new DomainExceptions("Sorry, something went wrong. Try again later.");
+                throw new DomainExceptions("Sorry, something went wrong. Try again later.");
             driver.CreatedAt = DateTime.UtcNow;
-            return driver.Id;
+            var resquest = await _drivers.Create(driver);
+            return (resquest, resquest.Id != 0);
         }
 
         public async Task<IEnumerable<Driver>> GetAllAsync(int pageNumber, int pageSize)
@@ -59,8 +60,14 @@ namespace Drivers_Management.Domain.Services
             {
                 return false;
             }
-       
-            return false; // await _drivers.VinculateAsync(driverId, vehicleId);
+            var vinculation = new DriverVehicle
+            {
+                Drivers = driver,
+                Vehicles = vehicle,
+                VehiclesId = vehicleId,
+                DriversId = driverId
+            };
+            return await _drivers.VinculateAsync(vinculation);
         }
     }
 }
