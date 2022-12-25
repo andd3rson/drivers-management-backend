@@ -25,7 +25,7 @@ namespace Drivers_Management.Infra.Repository
                                  .Skip((pageNumber - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(x => x.Drivers)
-                                 .ThenInclude(x => x.Drivers)
+                                //  .ThenInclude(x => x.Drivers)
                                  .ToListAsync();
         }
     }

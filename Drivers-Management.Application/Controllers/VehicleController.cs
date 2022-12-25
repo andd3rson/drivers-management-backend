@@ -9,8 +9,7 @@ namespace Drivers_Management.Application.Controllers
     [ApiController]
     [Route("vehicle")]
     public class VehicleController : ControllerBase
-    {
-        // TODO: Implement Automapper
+    {       
         private readonly IVehicleServices _vehicleServices;
         private readonly IMapper _mapper;
         public VehicleController(IVehicleServices vehicleServices, IMapper mapper)
@@ -21,19 +20,7 @@ namespace Drivers_Management.Application.Controllers
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
-        {
-            var req = await _vehicleServices.GetAllAsync(pageNumber, pageSize);
-            var list = new List<VehiclesResponse>();
-            foreach (var item in req)
-            {
-                var s = item.Drivers.Select(x => x.Drivers);
-                var t = _mapper.Map<List<DriversResponse>>(s);
-
-                list.Add(new VehiclesResponse(item.Id, item.Brand, item.Brand, item.Year, t));
-            }
-            return Ok(list);
-
-        }
+            => Ok(_mapper.Map<List<VehiclesResponse>>(await _vehicleServices.GetAllAsync(pageNumber, pageSize)));
 
         [HttpGet("plate")]
         public async Task<IActionResult> GetByPlateAsync([FromQuery] string plate)

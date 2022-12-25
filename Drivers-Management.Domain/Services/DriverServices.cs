@@ -60,14 +60,9 @@ namespace Drivers_Management.Domain.Services
             {
                 return false;
             }
-            var vinculation = new DriverVehicle
-            {
-                Drivers = driver,
-                Vehicles = vehicle,
-                VehiclesId = vehicleId,
-                DriversId = driverId
-            };
-            return await _drivers.VinculateAsync(vinculation);
+            driver.Vehicles.Add(vehicle);
+            return await _drivers.UpdateAsync(driver);
+
         }
     }
 }
