@@ -8,7 +8,7 @@ using OneOf;
 
 namespace Drivers_Management.Domain.Services
 {
-    // TODO: Implement Base Service to common methods
+    
     public class VehicleServices : IVehicleServices
     {
         private readonly IVehicleRepository _vehicle;

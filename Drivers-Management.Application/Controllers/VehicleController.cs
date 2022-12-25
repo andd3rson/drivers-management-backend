@@ -31,8 +31,6 @@ namespace Drivers_Management.Application.Controllers
 
                 list.Add(new VehiclesResponse(item.Id, item.Brand, item.Brand, item.Year, t));
             }
-            // RUNNING WITH AUTOMAPPER 
-            // return Ok(_mapper.Map<List<VehiclesResponse>>(await _vehicleServices.GetAllAsync(pageNumber, pageSize)));
             return Ok(list);
 
         }
@@ -41,7 +39,7 @@ namespace Drivers_Management.Application.Controllers
         public async Task<IActionResult> GetByPlateAsync([FromQuery] string plate)
             => Ok(await _vehicleServices.GetByPlateAsync(plate));
 
-        // TODO : One of the last things to implement 
+        // TODO : Returns a list of element's find. 
         [HttpGet("filter")]
         public async Task<IActionResult> GetAdvancedFilterAsync()
             => Ok(await _vehicleServices.GetByAdvancedFilterAsync());
@@ -55,11 +53,6 @@ namespace Drivers_Management.Application.Controllers
                 return BadRequest();
 
             return Created("/", request.Item1.Id);
-        }
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync()
-        {
-            return NoContent();
         }
 
     }
