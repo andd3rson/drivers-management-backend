@@ -1,0 +1,21 @@
+name: Driver Management Continuos deploy.
+
+on:
+  push:
+    branches:
+      - "master"
+jobs:
+  app-build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout build.
+        uses: action/checkout@v3
+
+      - name: Setup .NET 6.
+        uses: actions/setup-dotnet@v3.
+        with:
+          dotnet-version: '6.0.x'
+      
+      - name: building app.
+        run: dotnet build -c Release
+  
