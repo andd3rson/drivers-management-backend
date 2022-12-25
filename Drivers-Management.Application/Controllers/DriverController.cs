@@ -18,31 +18,14 @@ namespace Drivers_Management.Application.Controllers
             _mapper = mapper;
         }
 
-        /* TODO: 
-            * CHANGE TO AUTOMAPPER
-            * Create a Custom page response for every class.
-        */
+        // TODO: Create a Custom page response for every class.
+
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
-        {
-            var r = await _driverServices.GetAllAsync(pageNumber, pageSize);
-
-            List<DriverResponse> list = new List<DriverResponse>();
-            var b = r.SelectMany(x => x.Vehicles).Select(x => x.Vehicles);
-            var c = _mapper.Map<List<VehiclesResponse>>(b);
-
-            foreach (var item in r)
-            {
-                var s = item.Vehicles.Select(x => x.Vehicles);
-                var t = _mapper.Map<List<VehiclesResponse>>(s);
+            => Ok(_mapper.Map<IEnumerable<DriverResponse>>(await _driverServices.GetAllAsync(pageNumber, pageSize)));
 
 
-                list.Add(new DriverResponse(item.Id, item.Name, item.Cpf, item.Email, t));
-            }
-            return Ok(list);
 
-        }
-        // CHANGE HERE TO AUTOMAPPER AS WELL.
         // RETURN A FILTER LIST.
         [HttpGet("{cpf}")]
         public async Task<IActionResult> GetByCpfAsync(string cpf)
@@ -50,11 +33,9 @@ namespace Drivers_Management.Application.Controllers
             var result = await _driverServices.GetByCpfAsync(cpf);
             if (result is null)
                 return NotFound();
-
-            DriverResponse res = new DriverResponse(result.Id, result.Name, result.Cpf, result.Email, _mapper.Map<List<VehiclesResponse>>(result.Vehicles));
-
-            return Ok(res);
+            return Ok(_mapper.Map<DriverResponse>(result));
         }
+
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(DriverRequest driverRequest)

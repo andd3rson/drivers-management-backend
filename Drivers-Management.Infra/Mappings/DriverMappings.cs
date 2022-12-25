@@ -8,6 +8,7 @@ namespace Drivers_Management.Infra.Mappings
     {
         public void Configure(EntityTypeBuilder<Driver> builder)
         {
+            builder.ToTable("tb_drivers");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                     .ValueGeneratedOnAdd();
@@ -20,6 +21,10 @@ namespace Drivers_Management.Infra.Mappings
             builder.Property(x => x.Name)
                  .HasColumnType("varchar(50)")
                 .IsRequired();
+
+            builder.HasMany(x => x.Vehicles)
+                .WithMany(x => x.Drivers)
+                .UsingEntity<DriverVehicle>(x => x.ToTable("tb_driver_vehicle"));
 
         }
     }

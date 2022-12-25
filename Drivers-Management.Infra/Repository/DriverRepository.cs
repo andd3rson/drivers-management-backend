@@ -33,7 +33,7 @@ namespace Drivers_Management.Infra.Repository
                                  .Skip((pageNumber - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(x => x.Vehicles)
-                                 .ThenInclude(x => x.Vehicles)
+                                //  .ThenInclude(x => x.Vehicles)
                                  .ToListAsync();
         }
     }
