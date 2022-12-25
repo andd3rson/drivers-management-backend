@@ -41,13 +41,15 @@ namespace Drivers_Management.Domain.Services
             return await _vehicle.GetByPlateAsync(plate);
         }
 
-        public async Task<OneOf<DomainExceptions, int>> PostAsyncllAsync(Vehicle vehicle)
+        public async Task<(Vehicle, bool)> CreateAsync(Vehicle vehicle)
         {
             var validateModel = await _validator.ValidateAsync(vehicle);
             if (!validateModel.IsValid)
-                return new DomainExceptions("Sorry, something went wrong. Try again later.");
+                throw new DomainExceptions("Sorry, something went wrong. Try again later.");
+
             vehicle.CreatedAt = DateTime.UtcNow;
-            return (await _vehicle.Create(vehicle)).Id;
+            var response = await _vehicle.Create(vehicle);
+            return (vehicle, response.Id != 0);
         }
 
         public async Task<bool> UpdateAsync(Vehicle vehicle)

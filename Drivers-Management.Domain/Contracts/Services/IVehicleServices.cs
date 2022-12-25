@@ -1,6 +1,4 @@
 using Drivers_Management.Domain.Models;
-using Drivers_Management.Domain.Utils;
-using OneOf;
 
 namespace Drivers_Management.Domain.Contracts.Services
 {
@@ -9,9 +7,9 @@ namespace Drivers_Management.Domain.Contracts.Services
         Task<Vehicle> GetByPlateAsync(string plate);
         Task<IEnumerable<Vehicle>> GetAllAsync(int pageNumber, int pageSize);
         Task<IEnumerable<Vehicle>> GetByAdvancedFilterAsync();
-        Task<OneOf<DomainExceptions, int>> PostAsyncllAsync(Vehicle vehicle);
+        Task<(Vehicle, bool)> CreateAsync(Vehicle vehicle);
         Task<bool> UpdateAsync(Vehicle vehicle);
-        
+
         Task<Vehicle> GetByIdAsync(int id);
     }
 }

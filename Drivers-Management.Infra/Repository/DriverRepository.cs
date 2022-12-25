@@ -16,15 +16,15 @@ namespace Drivers_Management.Infra.Repository
 
         public async Task<Driver> GetByCpfAsync(string cpf)
         {
+            string match = $"%{cpf}%";
             return await _context.Set<Driver>()
-                            .Where(x => EF.Functions.Like(x.Cpf, $"${cpf}")).FirstOrDefaultAsync();
+                            .Where(x => EF.Functions.Like(x.Cpf, match)).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> VinculateAsync(string driverId, string vehicleId)
+        public async Task<bool> VinculateAsync(DriverVehicle driverVehicle)
         {
-            // _context.DriverVehicle.Add(new DriverVehicle { DriversId = Guid.Parse(driverId), VehiclesId = Guid.Parse(vehicleId) });
-            // return await _context.SaveChangesAsync() > 0;
-           return true;
+            _context.Set<DriverVehicle>().Add(driverVehicle);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<IEnumerable<Driver>> GetAllAsync(int pageSize, int pageNumber)
@@ -33,6 +33,7 @@ namespace Drivers_Management.Infra.Repository
                                  .Skip((pageNumber - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(x => x.Vehicles)
+                                 .ThenInclude(x => x.Vehicles)
                                  .ToListAsync();
         }
     }

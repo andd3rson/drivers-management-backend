@@ -1,6 +1,4 @@
 using Drivers_Management.Domain.Models;
-using Drivers_Management.Domain.Utils;
-using OneOf;
 
 namespace Drivers_Management.Domain.Contracts.Services
 {
@@ -8,7 +6,7 @@ namespace Drivers_Management.Domain.Contracts.Services
     {
         Task<IEnumerable<Driver>> GetAllAsync(int pageNumber, int pageSize);
         Task<Driver> GetByCpfAsync(string cpf);
-        Task<OneOf<DomainExceptions, int>> AddAsync(Driver driver);
+        Task<(Driver, bool)> CreateAsync(Driver driver);
         Task<bool> UpdateAsync(Driver driver);
         Task<bool> Vinculate(int driverId, int vehicleId);
     }

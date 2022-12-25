@@ -5,6 +5,6 @@ namespace Drivers_Management.Domain.Contracts.Repository
     public interface IDriverRepository : IBaseRepository<Driver>
     {
         Task<Driver> GetByCpfAsync(string cpf);
-        Task<bool> VinculateAsync(string driverId, string vehicleId);
+        Task<bool> VinculateAsync(DriverVehicle driverVehicle);
     }
 }

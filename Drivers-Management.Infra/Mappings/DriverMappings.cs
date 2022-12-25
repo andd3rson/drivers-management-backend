@@ -9,6 +9,8 @@ namespace Drivers_Management.Infra.Mappings
         public void Configure(EntityTypeBuilder<Driver> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id)
+                    .ValueGeneratedOnAdd();
             builder.HasIndex(x => x.Cpf);
 
             builder.Property(x => x.Cpf)
@@ -18,10 +20,6 @@ namespace Drivers_Management.Infra.Mappings
             builder.Property(x => x.Name)
                  .HasColumnType("varchar(50)")
                 .IsRequired();
-
-            builder.Ignore(x => x.Vehicles);
-
-           
 
         }
     }

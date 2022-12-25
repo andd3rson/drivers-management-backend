@@ -9,6 +9,8 @@ namespace Drivers_Management.Infra.Mappings
         public void Configure(EntityTypeBuilder<Vehicle> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id)
+                   .ValueGeneratedOnAdd();
             builder.HasIndex(x => x.Plate);
 
             builder.Property(x => x.Plate)
@@ -17,13 +19,6 @@ namespace Drivers_Management.Infra.Mappings
             builder.Property(x => x.Brand)
                .HasColumnType("varchar(20)")
               .IsRequired();
-
-            // builder.Property(x => x.CreatedAt)
-            //     .ValueGeneratedOnAdd()
-            //     .HasValueGenerator(typeof(DateTime));
-
-            // builder.Property(x => x.UpdateAt)
-            //         .ValueGeneratedOnUpdate();
 
         }
     }
