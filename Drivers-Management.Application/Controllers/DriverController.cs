@@ -19,15 +19,31 @@ namespace Drivers_Management.Application.Controllers
         }
 
         /* TODO: 
-            * Create a pagination filter class to received pageSize and pageNumber params.
+            * CHANGE TO AUTOMAPPER
             * Create a Custom page response for every class.
         */
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
         {
-            return Ok(await _driverServices.GetAllAsync(pageNumber, pageSize));
-        }
+            var r = await _driverServices.GetAllAsync(pageNumber, pageSize);
 
+            List<DriverResponse> list = new List<DriverResponse>();
+            var b = r.SelectMany(x => x.Vehicles).Select(x => x.Vehicles);
+            var c = _mapper.Map<List<VehiclesResponse>>(b);
+
+            foreach (var item in r)
+            {
+                var s = item.Vehicles.Select(x => x.Vehicles);
+                var t = _mapper.Map<List<VehiclesResponse>>(s);
+
+
+                list.Add(new DriverResponse(item.Id, item.Name, item.Cpf, item.Email, t));
+            }
+            return Ok(list);
+
+        }
+        // CHANGE HERE TO AUTOMAPPER AS WELL.
+        // RETURN A FILTER LIST.
         [HttpGet("{cpf}")]
         public async Task<IActionResult> GetByCpfAsync(string cpf)
         {
@@ -35,10 +51,11 @@ namespace Drivers_Management.Application.Controllers
             if (result is null)
                 return NotFound();
 
-            return Ok(result);
+            DriverResponse res = new DriverResponse(result.Id, result.Name, result.Cpf, result.Email, _mapper.Map<List<VehiclesResponse>>(result.Vehicles));
+
+            return Ok(res);
         }
 
-        // TODO: Change return to 201 returns
         [HttpPost]
         public async Task<IActionResult> PostAsync(DriverRequest driverRequest)
         {
@@ -59,6 +76,7 @@ namespace Drivers_Management.Application.Controllers
             return t ? Ok() : BadRequest();
         }
 
+        // Apply tests
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] Driver driver)
         {

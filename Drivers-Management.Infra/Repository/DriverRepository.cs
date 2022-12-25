@@ -16,8 +16,9 @@ namespace Drivers_Management.Infra.Repository
 
         public async Task<Driver> GetByCpfAsync(string cpf)
         {
+            string match = $"%{cpf}%";
             return await _context.Set<Driver>()
-                            .Where(x => EF.Functions.Like(x.Cpf, $"${cpf}")).FirstOrDefaultAsync();
+                            .Where(x => EF.Functions.Like(x.Cpf, match)).FirstOrDefaultAsync();
         }
 
         public async Task<bool> VinculateAsync(DriverVehicle driverVehicle)
