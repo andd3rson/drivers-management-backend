@@ -18,4 +18,7 @@ jobs:
       
       - name: building app.
         run: dotnet build -c Release
+
+      - name: Testing app
+        run: dotnet test
   

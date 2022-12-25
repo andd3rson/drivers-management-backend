@@ -21,14 +21,7 @@ namespace Drivers_Management.Infra.Repository
             return entity;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(int pageSize, int pageNumber)
-        {
-            return await _context.Set<T>()
-                                 .Skip((pageNumber - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
-        }
-
+  
         public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
