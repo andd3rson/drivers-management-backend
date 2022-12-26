@@ -31,6 +31,7 @@ namespace Drivers_Management.Domain.Services
             var validateModel = await _validator.ValidateAsync(driver);
             if (!validateModel.IsValid)
                 return (driver, false);
+                
             driver.CreatedAt = DateTime.UtcNow;
             var resquest = await _drivers.Create(driver);
             return (resquest, resquest.Id != 0);
