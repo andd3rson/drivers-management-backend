@@ -26,6 +26,7 @@ namespace Drivers_Management.Domain.Services
             return await _drivers.GetAllAsync(pageSize, pageNumber);
         }
 
+        // TODO: Add uniq cpf validate
         public async Task<(Driver, bool)> CreateAsync(Driver driver)
         {
             var validateModel = await _validator.ValidateAsync(driver);
