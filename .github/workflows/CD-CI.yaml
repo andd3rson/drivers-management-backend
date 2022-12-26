@@ -23,5 +23,5 @@ jobs:
         run: dotnet build -c Release --no-restore
 
       - name: Testing app
-        run: dotnet test --no-build
+        run: dotnet test -c Release --no-build
   
