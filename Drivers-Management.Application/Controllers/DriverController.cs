@@ -51,11 +51,8 @@ namespace Drivers_Management.Application.Controllers
 
         [HttpPost("join")]
         public async Task<IActionResult> PostVinculatAsync([FromQuery] int idDriver, [FromQuery] int idVehicle)
-        {
-            bool t = await _driverServices.Vinculate(idDriver, idVehicle);
+            => await _driverServices.Vinculate(idDriver, idVehicle) ? Ok() : BadRequest();
 
-            return t ? Ok() : BadRequest();
-        }
 
         // Apply tests
         [HttpPut("{id}")]
