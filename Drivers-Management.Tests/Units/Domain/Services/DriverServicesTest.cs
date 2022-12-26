@@ -4,6 +4,7 @@ using Drivers_Management.Domain.Services;
 using Drivers_Management.Tests.Fakers;
 using FluentAssertions;
 using FluentValidation;
+using FluentValidation.Results;
 using NSubstitute;
 
 namespace Drivers_Management.Tests.Units.Domain.Services
@@ -42,13 +43,89 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             _driverRepository.GetAllAsync(takes, Arg.Any<int>())
                             .Returns(DriversFakers.listDrivers().Take(takes));
             var sut = new DriverServices(_driverRepository, _validator, null);
-
             //When
             var response = await sut.GetAllAsync(1, takes);
-
             //Then
             response.Count().Should().Be(takes);
+        }
 
+
+        [Fact]
+        public async Task CreateAsync_ShouldReturnsTrue_WhenHasSuccess()
+
+        {
+            // Given
+            var driver = DriversFakers.TakeOneDriver();
+            _driverRepository.Create(driver).Returns(
+                    new Driver
+                    {
+                        Id = 1,
+                        Cpf = driver.Cpf,
+                        Email = driver.Email,
+                        Name = driver.Name
+                    }
+            );
+
+            _validator.ValidateAsync(driver).Returns(new ValidationResult());
+            var sut = new DriverServices(_driverRepository, _validator, null);
+            // When
+            var response = await sut.CreateAsync(driver);
+            // Then
+            response.Item2.Should().BeTrue();
+            response.Item1.Should().BeOfType<Driver>();
+        }
+
+        [Fact]
+        public async Task CreateAsync_ShouldReturnsFalse_WhenHasErrorAtRepository()
+        {
+            // Given
+            var driver = DriversFakers.TakeOneDriver();
+            _driverRepository.Create(driver).Returns(
+                    new Driver()
+                   
+            );
+
+            _validator.ValidateAsync(driver).Returns(new ValidationResult());
+
+
+            var sut = new DriverServices(_driverRepository, _validator, null);
+            // When
+            var response = await sut.CreateAsync(driver);
+            // Then
+            response.Item2.Should().BeFalse();
+            response.Item1.Should().BeOfType<Driver>();
+        }
+
+
+        [Fact]
+        public async Task CreateAsync_ShouldReturnsFalse_WhenInvalidModel()
+        {
+            // Given
+            var driver = DriversFakers.TakeOneDriver();
+            _driverRepository.Create(driver).Returns(
+                    new Driver
+                    {
+                        Id = 1,
+                        Cpf = driver.Cpf,
+                        Email = driver.Email,
+                        Name = driver.Name
+                    }
+            );
+
+            _validator.ValidateAsync(driver).Returns(new ValidationResult()
+            {
+                Errors = new List<ValidationFailure>()
+                {
+                    new ValidationFailure("mock", "something went wrong")
+                }
+            });
+            var sut = new DriverServices(_driverRepository, _validator, null);
+            // When
+            var response = await sut.CreateAsync(driver);
+
+            // Then
+            response.Item2.Should().BeFalse();
+            response.Item1.Should().BeOfType<Driver>();
         }
 
     }

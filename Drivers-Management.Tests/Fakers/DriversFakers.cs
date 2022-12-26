@@ -94,5 +94,16 @@ namespace Drivers_Management.Tests.Fakers
 
             };
         }
+
+        public static Driver TakeOneDriver()
+        {
+            return new Driver()
+            {
+
+                Cpf = "84512154086",
+                Email = "test@test.com",
+                Name = "TestSon"
+            };
+        }
     }
 }
