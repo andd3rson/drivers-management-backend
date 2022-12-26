@@ -6,6 +6,7 @@ using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 
 namespace Drivers_Management.Tests.Units.Domain.Services
 {
@@ -18,6 +19,33 @@ namespace Drivers_Management.Tests.Units.Domain.Services
         {
             _driverRepository = Substitute.For<IDriverRepository>();
             _validator = Substitute.For<IValidator<Driver>>();
+        }
+
+        [Fact]
+        public async Task GetByCpfAsync_ShouldReturnsNull_WhenInvalidArgument()
+        {
+            //Given
+            string cpf = "";
+            _driverRepository.GetByCpfAsync(cpf).ReturnsNull();
+            var sut = new DriverServices(_driverRepository, _validator, null);
+            //When
+            var response = await sut.GetByCpfAsync(cpf);
+            //Then
+            response.Should().BeNull();
+
+        }
+
+        [Fact]
+        public async Task GetByCpfAsync_ShouldReturnsDriver_WhenIsValidArgument()
+        {
+            //Given
+            _driverRepository.GetByCpfAsync(Arg.Any<string>()).Returns(DriversFakers.TakeOneDriver());
+            var sut = new DriverServices(_driverRepository, _validator, null);
+            //When
+            var response = await sut.GetByCpfAsync("84512154086");
+            //Then
+            response.Should().NotBeNull();
+
         }
 
         [Fact]
@@ -82,7 +110,7 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             var driver = DriversFakers.TakeOneDriver();
             _driverRepository.Create(driver).Returns(
                     new Driver()
-                   
+
             );
 
             _validator.ValidateAsync(driver).Returns(new ValidationResult());
