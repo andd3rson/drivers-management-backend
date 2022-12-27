@@ -10,6 +10,6 @@ namespace Drivers_Management.Domain.Contracts.Services
         Task<(Vehicle, bool)> CreateAsync(Vehicle vehicle);
         Task<bool> UpdateAsync(Vehicle vehicle);
 
-        Task<Vehicle> GetByIdAsync(int id);
+        // Task<Vehicle> GetByIdAsync(int id);
     }
 }
