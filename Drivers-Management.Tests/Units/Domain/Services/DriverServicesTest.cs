@@ -14,10 +14,13 @@ namespace Drivers_Management.Tests.Units.Domain.Services
     {
 
         private readonly IDriverRepository _driverRepository;
+
+        private readonly IVehicleRepository _vehicleRepository;
         private readonly IValidator<Driver> _validator;
         public DriverServicesTest()
         {
             _driverRepository = Substitute.For<IDriverRepository>();
+            _vehicleRepository = Substitute.For<IVehicleRepository>();
             _validator = Substitute.For<IValidator<Driver>>();
         }
 
@@ -154,6 +157,94 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             // Then
             response.Item2.Should().BeFalse();
             response.Item1.Should().BeOfType<Driver>();
+        }
+
+
+        [Fact]
+        public async Task UpdateAsync_ShouldReturnFalse_WhenInvalidModel()
+        {
+            // Given
+            _validator.ValidateAsync(Arg.Any<Driver>()).Returns(new ValidationResult()
+            {
+                Errors = new List<ValidationFailure>()
+                {
+                    new ValidationFailure("Name", "Something went wrong")
+                }
+            });
+            var sut = new DriverServices(_driverRepository, _validator, null);
+            // When
+            var result = await sut.UpdateAsync(DriversFakers.TakeOneDriver());
+
+            // Then
+            result.Should().BeFalse();
+
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldReturnFalse_WhenHasNoDriverToUpdate()
+        {
+            // Given
+            _driverRepository.GetByCpfAsync(Arg.Any<string>())
+                    .ReturnsNull();
+            _validator.ValidateAsync(Arg.Any<Driver>())
+                      .Returns(new ValidationResult());
+
+            var sut = new DriverServices(_driverRepository, _validator, null);
+
+            // When
+            var result = await sut.UpdateAsync(DriversFakers.TakeOneDriver());
+            // Then
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task UpdateAsync_ShouldReturnTrue_WhenHasSuccessUpdate()
+        {
+            // Given
+            _validator.ValidateAsync(Arg.Any<Driver>())
+                      .Returns(new ValidationResult());
+
+            _driverRepository.GetByCpfAsync(Arg.Any<string>())
+                    .Returns(DriversFakers.TakeOneDriver());
+
+            _driverRepository.UpdateAsync(Arg.Any<Driver>()).Returns(true);
+            var sut = new DriverServices(_driverRepository, _validator, null);
+
+            // When
+            var result = await sut.UpdateAsync(new Driver());
+
+            // Then
+            result.Should().BeTrue();
+
+        }
+
+        [Fact]
+        public async Task Vinculate_ShouldReturnFalse_WhenInvalidDriverIdOrVehicleIdIsInvalid()
+        {
+            // Given
+            _driverRepository.GetByIdAsync(Arg.Any<int>()).ReturnsNull();
+            _vehicleRepository.GetByIdAsync(Arg.Any<int>()).ReturnsNull();
+            var sut = new DriverServices(_driverRepository, _validator, _vehicleRepository);
+
+            // When
+            var result = await sut.Vinculate(0, 5614);
+            // Then
+            result.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task Vinculate_ShouldReturnTrue_WhenHasValidData()
+        {
+            // Given
+            _driverRepository.GetByIdAsync(Arg.Any<int>()).Returns(new Driver());
+            _vehicleRepository.GetByIdAsync(Arg.Any<int>()).Returns(new Vehicle());
+            _driverRepository.UpdateAsync(Arg.Any<Driver>()).Returns(true);
+            var sut = new DriverServices(_driverRepository, _validator, _vehicleRepository);
+
+            // When
+            var result = await sut.Vinculate(0, 5614);
+            // Then
+            result.Should().BeTrue();
         }
 
     }
