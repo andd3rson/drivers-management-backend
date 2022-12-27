@@ -132,18 +132,7 @@ namespace Drivers_Management.Tests.Units.Domain.Services
         public async Task CreateAsync_ShouldReturnsFalse_WhenInvalidModel()
         {
             // Given
-            var driver = DriversFakers.TakeOneDriver();
-            _driverRepository.Create(driver).Returns(
-                    new Driver
-                    {
-                        Id = 1,
-                        Cpf = driver.Cpf,
-                        Email = driver.Email,
-                        Name = driver.Name
-                    }
-            );
-
-            _validator.ValidateAsync(driver).Returns(new ValidationResult()
+            _validator.ValidateAsync(Arg.Any<Driver>()).Returns(new ValidationResult()
             {
                 Errors = new List<ValidationFailure>()
                 {
@@ -152,7 +141,7 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             });
             var sut = new DriverServices(_driverRepository, _validator, null);
             // When
-            var response = await sut.CreateAsync(driver);
+            var response = await sut.CreateAsync(DriversFakers.TakeOneDriver());
 
             // Then
             response.Item2.Should().BeFalse();

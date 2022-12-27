@@ -2,7 +2,6 @@ using System.Text.RegularExpressions;
 using Drivers_Management.Domain.Contracts.Repository;
 using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
-using Drivers_Management.Domain.Utils;
 using FluentValidation;
 
 namespace Drivers_Management.Domain.Services
@@ -55,10 +54,6 @@ namespace Drivers_Management.Domain.Services
             return await _vehicle.UpdateAsync(exists);
         }
 
-        public async Task<Vehicle> GetByIdAsync(int id)
-        {
-            return await _vehicle.GetByIdAsync(id);
-        }
         // TODO: 
         public Task<IEnumerable<Vehicle>> GetByAdvancedFilterAsync()
         {
