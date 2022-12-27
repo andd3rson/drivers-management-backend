@@ -4,11 +4,10 @@ using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
 using Drivers_Management.Domain.Utils;
 using FluentValidation;
-using OneOf;
 
 namespace Drivers_Management.Domain.Services
 {
-    
+
     public class VehicleServices : IVehicleServices
     {
         private readonly IVehicleRepository _vehicle;
@@ -17,12 +16,16 @@ namespace Drivers_Management.Domain.Services
         {
             _vehicle = vehicle;
             _validator = validator;
-
         }
-        // TODO: 
-        public Task<IEnumerable<Vehicle>> GetByAdvancedFilterAsync()
+
+        public async Task<Vehicle> GetByPlateAsync(string plate)
         {
-            throw new NotImplementedException();
+            var regex = new Regex("[a-zA-Z]");
+            if (!regex.IsMatch(plate))
+            {
+                return null;
+            }
+            return await _vehicle.GetByPlateAsync(plate);
         }
 
         public async Task<IEnumerable<Vehicle>> GetAllAsync(int pageNumber, int pageSize)
@@ -31,22 +34,12 @@ namespace Drivers_Management.Domain.Services
             return await _vehicle.GetAllAsync(pageSize, pageNumber);
         }
 
-        public async Task<Vehicle> GetByPlateAsync(string plate)
-        {
-            var regex = new Regex("[a-zA-Z]");
-            if (!regex.IsMatch(plate))
-            {
-                throw new DomainExceptions();
-            }
-            return await _vehicle.GetByPlateAsync(plate);
-        }
-
+        // Todo: Add return list error if something wrong happens
         public async Task<(Vehicle, bool)> CreateAsync(Vehicle vehicle)
         {
             var validateModel = await _validator.ValidateAsync(vehicle);
             if (!validateModel.IsValid)
-                throw new DomainExceptions("Sorry, something went wrong. Try again later.");
-
+                return (vehicle, false);
             vehicle.CreatedAt = DateTime.UtcNow;
             var response = await _vehicle.Create(vehicle);
             return (vehicle, response.Id != 0);
@@ -65,6 +58,11 @@ namespace Drivers_Management.Domain.Services
         public async Task<Vehicle> GetByIdAsync(int id)
         {
             return await _vehicle.GetByIdAsync(id);
+        }
+        // TODO: 
+        public Task<IEnumerable<Vehicle>> GetByAdvancedFilterAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
