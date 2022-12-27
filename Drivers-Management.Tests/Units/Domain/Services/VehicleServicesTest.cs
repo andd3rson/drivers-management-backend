@@ -1,6 +1,7 @@
 using Drivers_Management.Domain.Contracts.Repository;
 using Drivers_Management.Domain.Models;
 using Drivers_Management.Domain.Services;
+using Drivers_Management.Tests.Fakers;
 using FluentAssertions;
 using FluentValidation;
 using NSubstitute;
@@ -47,6 +48,32 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             // Then               
             response.Should().NotBeNull();
             response.Plate.Should().Be(plate);
+        }
+
+        [Fact]
+        public async Task GetAllAsync_ShouldReturnsEmpty_WhenHasNoItemOnDataBase()
+        {
+            //Given
+            var sut = new VehicleServices(_vehicleRepository, _validator);
+            //When
+            var response = await sut.GetAllAsync(1, 10);
+            //Then
+            response.Count().Should().Be(0);
+
+        }
+
+        [Fact]
+        public async Task GetAllAsync_ShouldReturnsAList_WhenHasItemOnDataBase()
+        {
+            //Given
+            var takes = 2;
+            _vehicleRepository.GetAllAsync(takes, Arg.Any<int>())
+                            .Returns(VehiclesFakers.GetVehiclesList().Take(takes));
+            var sut = new VehicleServices(_vehicleRepository, _validator);
+            //When
+            var response = await sut.GetAllAsync(1, takes);
+            //Then
+            response.Count().Should().Be(takes);
         }
     }
 }
