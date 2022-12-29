@@ -2,16 +2,16 @@
 
 ### About this project
 
-    This project is just for testing myself. I receaved this one on Jan/2020. 
+    This project is just for testing myself. I received this one on Jan/2020. 
     But just now I started. Why? I was looking for something that I could keep coding, 
-    As I am in Australia studying and It's hard find a job, I thought this project is
-    interesting for me. Because I can to pratice interesting thing as to use relationship n:n, 
-    Authenticatition/Authorization, docker, CI/CD, Unit/integratuion tests. 
+    As I am in Australia studying and It's hard find a job here, I thought this project is
+    interesting for me. Because I can to pratice interesting things like to use relationship n:n, 
+    Authenticatition/Authorization, Docker, CI/CD, Unit/Integratuion tests. 
     By the way, I am putting into more things that I learned in real projects. 
 
      
 
-### Challeger
+### Challenger
 
 
     You were hired by DETRAN to create a web solution for registering licensed drivers (CNH) 
@@ -31,6 +31,6 @@
   * SqlServer
 * AutoMapper
 * Fluent Validator
-* NewtonSoftware
+* NewtonSoft
 * Fluent Assertions
 * NSubstitute

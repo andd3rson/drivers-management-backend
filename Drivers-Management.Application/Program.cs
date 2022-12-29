@@ -7,13 +7,13 @@ using Drivers_Management.Infra.Context;
 using Drivers_Management.Infra.Repository;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers()
     .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+#region Data context
 builder.Services
        .AddDbContext<DriverManagementDbContext>(
            optionsAction =>
@@ -21,7 +21,14 @@ builder.Services
             b => b.MigrationsAssembly("Drivers-Management.Application")
            ));
 
+builder.Services.AddDefaultIdentity<User>(
+    opt =>
+    {
+        opt.User.RequireUniqueEmail = true;
+    }
+).AddEntityFrameworkStores<DriverManagementDbContext>();
 
+#endregion
 
 builder.Services.AddScoped<IValidator<Driver>, DriverValidator>();
 builder.Services.AddScoped<IValidator<Vehicle>, VehicleValidator>();
@@ -45,6 +52,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

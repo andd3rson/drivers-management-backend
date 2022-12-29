@@ -4,14 +4,11 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Drivers_Management.Infra.Context
 {
-    public class DriverManagementDbContext : IdentityDbContext
+    public class DriverManagementDbContext : IdentityDbContext<User>
     {
         public DriverManagementDbContext(DbContextOptions<DriverManagementDbContext> opt)
          : base(opt)
-        {
-
-
-        }
+            { }
 
 
         public virtual DbSet<Driver> Drivers { get; set; }
@@ -20,7 +17,7 @@ namespace Drivers_Management.Infra.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DriverManagementDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
