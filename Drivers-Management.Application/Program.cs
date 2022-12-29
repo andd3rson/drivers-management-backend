@@ -30,6 +30,7 @@ builder.Services.AddDefaultIdentity<User>(
 
 #endregion
 
+builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<IValidator<Driver>, DriverValidator>();
 builder.Services.AddScoped<IValidator<Vehicle>, VehicleValidator>();
 builder.Services.AddScoped<IDriverServices, DriverServices>();
