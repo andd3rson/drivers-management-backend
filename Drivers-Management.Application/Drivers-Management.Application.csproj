@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Drivers-Management.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
@@ -24,5 +28,4 @@
     <ProjectReference Include="..\Drivers-Management.Domain\Drivers-Management.Domain.csproj" />
     <ProjectReference Include="..\Drivers-Management.Infra\Drivers-Management.Infra.csproj" />
   </ItemGroup>
-
 </Project>

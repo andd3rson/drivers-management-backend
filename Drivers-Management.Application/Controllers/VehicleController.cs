@@ -9,7 +9,7 @@ namespace Drivers_Management.Application.Controllers
     [ApiController]
     [Route("vehicle")]
     public class VehicleController : ControllerBase
-    {       
+    {
         private readonly IVehicleServices _vehicleServices;
         private readonly IMapper _mapper;
         public VehicleController(IVehicleServices vehicleServices, IMapper mapper)
@@ -22,15 +22,18 @@ namespace Drivers_Management.Application.Controllers
         public async Task<IActionResult> GetAllAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
             => Ok(_mapper.Map<List<VehiclesResponse>>(await _vehicleServices.GetAllAsync(pageNumber, pageSize)));
 
+
         [HttpGet("plate")]
         public async Task<IActionResult> GetByPlateAsync([FromQuery] string plate)
-            => Ok(await _vehicleServices.GetByPlateAsync(plate));
+            => Ok(
+                _mapper.Map<VehiclesResponse>(await _vehicleServices.GetByPlateAsync(plate))
+                );
 
-        // TODO : Returns a list of element's find. 
+        /* TODO : Returns a list of element's find. 
         [HttpGet("filter")]
         public async Task<IActionResult> GetAdvancedFilterAsync()
             => Ok(await _vehicleServices.GetByAdvancedFilterAsync());
-
+        */
 
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] VehiclesRequest vehicle)
