@@ -1,3 +1,4 @@
+[] created "verify" method on tests
 [] implement middleware errors.
 [] implement loggs/metrics
 [] implement memory cache.
