@@ -15,7 +15,13 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
-      
+
       - name: building app.
-        run: dotnet build -c Release
+        run: dotnet restore
+
+      - name: building app.
+        run: dotnet build -c Release --no-restore
+
+      - name: Testing app
+        run: dotnet test -c Release --no-build
   

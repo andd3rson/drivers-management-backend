@@ -8,6 +8,7 @@ namespace Drivers_Management.Infra.Mappings
     {
         public void Configure(EntityTypeBuilder<Vehicle> builder)
         {
+             builder.ToTable("tb_vehicles");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
                    .ValueGeneratedOnAdd();

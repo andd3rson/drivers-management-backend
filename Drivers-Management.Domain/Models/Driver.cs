@@ -4,13 +4,13 @@ namespace Drivers_Management.Domain.Models
     {
         public Driver()
         {
-            
+            Vehicles = new List<Vehicle>();
         }
         public string Name { get; set; }
         public string Cpf { get; set; }
 
         public string Email { get; set; }
-        public IEnumerable<DriverVehicle> Vehicles { get; set; }
+        public List<Vehicle> Vehicles { get; set; } 
 
 
         public void ToUpdate(Driver driver)
