@@ -21,6 +21,8 @@ builder.Services
             b => b.MigrationsAssembly("Drivers-Management.Application")
            ));
 
+
+
 builder.Services.AddScoped<IValidator<Driver>, DriverValidator>();
 builder.Services.AddScoped<IValidator<Vehicle>, VehicleValidator>();
 builder.Services.AddScoped<IDriverServices, DriverServices>();

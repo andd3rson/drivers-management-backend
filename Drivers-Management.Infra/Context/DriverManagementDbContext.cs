@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Drivers_Management.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Drivers_Management.Infra.Context
 {
-    public class DriverManagementDbContext : DbContext
+    public class DriverManagementDbContext : IdentityDbContext
     {
         public DriverManagementDbContext(DbContextOptions<DriverManagementDbContext> opt)
          : base(opt)
