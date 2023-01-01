@@ -17,7 +17,7 @@ builder.Services.AddControllers()
 builder.Services
        .AddDbContext<DriverManagementDbContext>(
            optionsAction =>
-           optionsAction.UseSqlServer("Server=localhost;Database=Drivers;user=sa;password=Pass123!;",
+           optionsAction.UseSqlServer("Data Source=db_drivers;Initial Catalog=Drivers;user=sa;password=Pass123!;Integrated Security=False;",
             b => b.MigrationsAssembly("Drivers-Management.Application")
            ));
 
@@ -43,6 +43,17 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<DriverManagementDbContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {

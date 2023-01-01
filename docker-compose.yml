@@ -1,19 +1,19 @@
-version: '3.4'
+version: '3.7'
 services:
   api:
-    container_name: api
+    container_name: api-drivers
     build:
       context: .
-      dockerfile: "./Drivers-Management.Application/.dockerfile"
+      dockerfile: "./dockerfile"
     ports:
       - "8080:80"
     depends_on:
-      - database
+      - db_drivers
     networks:
       - application
-  database:
-      image: "mcr.microsoft.com/mssql/server:2022-latest"
-      container_name: mssql
+  db_drivers:
+      image: "mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04"
+      container_name: db_drivers
       environment:
         SA_PASSWORD: "Pass123!"
         ACCEPT_EULA: "Y"
