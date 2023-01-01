@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="OneOf" Version="3.0.223" />
   </ItemGroup>
