@@ -1,13 +1,14 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Drivers_Management.Application;
 using Drivers_Management.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Drivers_Management.Domain.Services
 {
-    public class UserServices
+    public class UserServices : IUserServices
     {
         private readonly UserManager<User> _user;
 
@@ -16,10 +17,17 @@ namespace Drivers_Management.Domain.Services
             _user = user;
         }
 
-        public async Task<IdentityResult> Register(User user)
+        public async Task<(IdentityResult, string)> Register(User user)
         {
 
-            return await _user.CreateAsync(user, user.PasswordHash);
+            var res = await _user.CreateAsync(user, user.PasswordHash);
+            if (!res.Succeeded)
+            {
+                return (res, null);
+            }
+            var token = await GenerateToken(user);
+
+            return (res, token);
 
         }
 
@@ -27,7 +35,7 @@ namespace Drivers_Management.Domain.Services
         public Task<string> GenerateToken(User user)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("@!!!!8890132shalalla@124");
+            var key = Encoding.ASCII.GetBytes(Settings.Secret);
             var securityTokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
