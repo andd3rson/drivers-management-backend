@@ -3,10 +3,12 @@ using Drivers_Management.Domain.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Drivers_Management.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Drivers_Management.Application.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("vehicle")]
     public class VehicleController : ControllerBase
     {
