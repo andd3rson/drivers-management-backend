@@ -5,4 +5,5 @@ public interface IUserServices
 {
 
     Task<(IdentityResult, string)> Register(User user);
+    Task<(User, string)> SignIn(User user);
 }

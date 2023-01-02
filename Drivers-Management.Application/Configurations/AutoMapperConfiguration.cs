@@ -23,7 +23,14 @@ namespace Drivers_Management.Application.Configurations
 
             #endregion
 
+            CreateMap<UserLogInRequest, User>()
+                .ForMember(dest => dest.UserName, o => o.MapFrom(x => x.Email))
+                .ForMember(dest => dest.Email, o => o.MapFrom(x => x.Email))
+                .ForMember(dest => dest.PasswordHash, o => o.MapFrom(x => x.Password));
+
             CreateMap<UserRegisterRequest, User>()
+                .ForMember(dest => dest.UserName, o => o.MapFrom(x => x.Email))
+                .ForMember(dest => dest.Email, o => o.MapFrom(x => x.Email))
                 .ForMember(dest => dest.PasswordHash, o => o.MapFrom(x => x.Password));
         }
     }

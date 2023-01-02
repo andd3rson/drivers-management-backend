@@ -11,7 +11,7 @@ namespace Drivers_Management.Domain.Services
     public class UserServices : IUserServices
     {
         private readonly UserManager<User> _user;
-
+        private readonly SignInManager<User> _userManager;
         public UserServices(UserManager<User> user)
         {
             _user = user;
@@ -30,9 +30,22 @@ namespace Drivers_Management.Domain.Services
             return (res, token);
 
         }
+        public async Task<(User, string)> SignIn(User user)
+        {
+            var login = await _userManager.PasswordSignInAsync(user.UserName, user.PasswordHash, false,false);
+            
+            if (!login.Succeeded)
+            {
+                return (user, null);
+            }
+            user.PasswordHash = "";
+            var token = await GenerateToken(user);
+            return (user, token);
+        }
 
 
-        public Task<string> GenerateToken(User user)
+
+        private Task<string> GenerateToken(User user)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -51,5 +64,6 @@ namespace Drivers_Management.Domain.Services
             var securityToken = jwtSecurityTokenHandler.CreateToken(securityTokenDescriptor);
             return Task.FromResult(jwtSecurityTokenHandler.WriteToken(securityToken));
         }
+
     }
 }
