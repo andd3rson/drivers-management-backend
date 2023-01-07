@@ -5,6 +5,7 @@ using AutoMapper;
 using Drivers_Management.Domain.Models;
 using Drivers_Management.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Drivers_Management.Application.Controllers
@@ -16,8 +17,10 @@ namespace Drivers_Management.Application.Controllers
         private readonly IUserServices _users;
         private readonly IMapper _mapper;
 
-        public UserController(UserServices users, IMapper mapper)
+        private readonly Settings _settings;
+        public UserController(UserServices users, IMapper mapper, IOptions<Settings> options)
         {
+            _settings = options.Value;
             _users = users;
             _mapper = mapper;
         }
@@ -54,8 +57,8 @@ namespace Drivers_Management.Application.Controllers
         private Task<string> GenerateToken(User user)
         {
             var jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
-            var secret = Settings.Secret;
-            var key = Encoding.ASCII.GetBytes(secret);
+
+            var key = Encoding.ASCII.GetBytes(_settings.SecretKey);
             var securityTokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

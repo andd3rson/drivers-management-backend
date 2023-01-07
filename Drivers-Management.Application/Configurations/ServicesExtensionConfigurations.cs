@@ -23,6 +23,7 @@ namespace Drivers_Management.Application.Configurations
             services.AddScoped<IValidator<Vehicle>, VehicleValidator>();
             services.AddScoped<IDriverServices, DriverServices>();
             services.AddScoped<IUserServices, UserServices>();
+            services.AddScoped<UserServices>();
 
             services.AddScoped<IVehicleServices, VehicleServices>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
@@ -62,9 +63,10 @@ namespace Drivers_Management.Application.Configurations
              ).AddEntityFrameworkStores<DriverManagementDbContext>();
         }
 
-        public static void AddConfigurationAuth(IServiceCollection services)
+        public static void AddConfigurationAuth(IServiceCollection services, string secretKey)
         {
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+
+            var key = Encoding.ASCII.GetBytes(secretKey);
             services.AddAuthentication(options =>
               {
                   options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
