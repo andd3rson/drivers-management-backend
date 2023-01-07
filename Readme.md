@@ -13,7 +13,6 @@
 
 ### Challenger
 
-
     You were hired by DETRAN to create a web solution for registering licensed drivers (CNH) 
     and recording all purchases and sales of vehicles made by drivers. The system must register,
     change and delete vehicles and drivers. The system should allow consulting of all the owners 
@@ -34,3 +33,14 @@
 * NewtonSoft
 * Fluent Assertions
 * NSubstitute
+
+
+### How to run 
+
+    I built this project using linux, so I thought that the best way to windows and linux run this project is using docker
+
+    .
+    .
+    .
+
+    [to be continued] 
