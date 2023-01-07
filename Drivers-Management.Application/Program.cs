@@ -22,7 +22,7 @@ builder.Services.AddControllers()
 builder.Services
        .AddDbContext<DriverManagementDbContext>(
            optionsAction =>
-           optionsAction.UseSqlServer("Data Source=localhost;Initial Catalog=Drivers;user=sa;password=Pass123!;Integrated Security=False;",
+           optionsAction.UseSqlServer("Data Source=db_drivers;Initial Catalog=Drivers;user=sa;password=Pass123!;Integrated Security=False;",
             b => b.MigrationsAssembly("Drivers-Management.Application")
            ));
 
