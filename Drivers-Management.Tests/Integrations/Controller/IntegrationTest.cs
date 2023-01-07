@@ -11,8 +11,8 @@ namespace Drivers_Management.Tests.Integrations.Controller
         protected readonly HttpClient _client;
         public IntegrationTest()
         {
-            var factory = new WebApplicationFactory<Program>();
-            _client = factory.CreateClient();
+            // var factory = new WebApplicationFactory<Program>();
+            // _client = factory.CreateClient();
         }
     }
 }
