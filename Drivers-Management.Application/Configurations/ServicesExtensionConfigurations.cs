@@ -1,4 +1,5 @@
 using System.Text;
+using Drivers_Management.Application.Middleware;
 using Drivers_Management.Domain.Contracts.Repository;
 using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
@@ -43,6 +44,8 @@ namespace Drivers_Management.Application.Configurations
                     }
                 });
             });
+            
+            services.AddTransient<GlobalErrorExceptions>();
         }
 
         public static void AddConfigurationDbContext(IServiceCollection services, string conn)

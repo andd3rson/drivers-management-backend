@@ -1,5 +1,6 @@
 using Drivers_Management.Application;
 using Drivers_Management.Application.Configurations;
+using Drivers_Management.Application.Middleware;
 using Drivers_Management.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 var key = builder.Configuration["SecretKey"];
 builder.Services.Configure<Settings>(opt => opt.SecretKey = key);
 ServicesExtensionConfigurations.AddConfigurationAuth(builder.Services, key);
+
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -39,9 +42,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<GlobalErrorExceptions>();
 app.MapControllers();
 app.Run();
