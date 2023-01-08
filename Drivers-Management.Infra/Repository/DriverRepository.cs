@@ -14,11 +14,11 @@ namespace Drivers_Management.Infra.Repository
             _context = context;
         }
 
-        public async Task<Driver> GetByCpfAsync(string cpf)
+        public async Task<IEnumerable<Driver>> GetByCpfAsync(string cpf)
         {
             string match = $"%{cpf}%";
             return await _context.Set<Driver>()
-                            .Where(x => EF.Functions.Like(x.Cpf, match)).FirstOrDefaultAsync();
+                            .Where(x => EF.Functions.Like(x.Cpf, match)).ToListAsync();
         }
 
         public async Task<bool> VinculateAsync(DriverVehicle driverVehicle)
@@ -33,7 +33,6 @@ namespace Drivers_Management.Infra.Repository
                                  .Skip((pageNumber - 1) * pageSize)
                                  .Take(pageSize)
                                  .Include(x => x.Vehicles)
-                                //  .ThenInclude(x => x.Vehicles)
                                  .ToListAsync();
         }
     }
