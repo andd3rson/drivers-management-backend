@@ -42,7 +42,7 @@ namespace Drivers_Management.Tests.Units.Domain.Services
         public async Task GetByCpfAsync_ShouldReturnsDriver_WhenIsValidArgument()
         {
             //Given
-            _driverRepository.GetByCpfAsync(Arg.Any<string>()).Returns(DriversFakers.TakeOneDriver());
+            _driverRepository.GetByCpfAsync(Arg.Any<string>()).Returns(DriversFakers.listDrivers());
             var sut = new DriverServices(_driverRepository, _validator, null);
             //When
             var response = await sut.GetByCpfAsync("84512154086");
@@ -193,7 +193,7 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             _validator.ValidateAsync(Arg.Any<Driver>())
                       .Returns(new ValidationResult());
 
-            _driverRepository.GetByCpfAsync(Arg.Any<string>())
+            _driverRepository.GetByIdAsync(Arg.Any<int>())
                     .Returns(DriversFakers.TakeOneDriver());
 
             _driverRepository.UpdateAsync(Arg.Any<Driver>()).Returns(true);
