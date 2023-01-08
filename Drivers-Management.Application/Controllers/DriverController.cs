@@ -21,13 +21,9 @@ namespace Drivers_Management.Application.Controllers
         }
 
         // TODO: Create a Custom page response for every class.
-
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
             => Ok(_mapper.Map<IEnumerable<DriverResponse>>(await _driverServices.GetAllAsync(pageNumber, pageSize)));
-
-
-
         // RETURN A FILTER LIST.
         [HttpGet("{cpf}")]
         public async Task<IActionResult> GetByCpfAsync(string cpf)

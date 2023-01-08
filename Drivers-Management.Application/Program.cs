@@ -3,6 +3,7 @@ using Drivers_Management.Application.Configurations;
 using Drivers_Management.Application.Middleware;
 using Drivers_Management.Infra.Context;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,9 @@ var key = builder.Configuration["SecretKey"];
 builder.Services.Configure<Settings>(opt => opt.SecretKey = key);
 ServicesExtensionConfigurations.AddConfigurationAuth(builder.Services, key);
 
+
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console());
 
 var app = builder.Build();
 

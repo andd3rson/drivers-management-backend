@@ -28,10 +28,11 @@
 * Entity Framework Core
   * Identity
   * SqlServer
-* User Secrets
-* Swagger
-* AutoMapper
 * Fluent Validation
+* AutoMapper
+* Serilog
+* Swagger
+* User Secrets
 * NewtonSoft
 * Fluent Assertions
 * NSubstitute
