@@ -31,6 +31,8 @@
 * Fluent Validation
 * AutoMapper
 * Serilog
+* ElasticSearch
+* Kibana
 * Swagger
 * User Secrets
 * NewtonSoft
