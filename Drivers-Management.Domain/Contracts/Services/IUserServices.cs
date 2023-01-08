@@ -4,6 +4,6 @@ using Microsoft.AspNetCore.Identity;
 public interface IUserServices
 {
 
-    Task<(IdentityResult, string)> Register(User user);
-    Task<(User, string)> SignIn(User user);
+    Task<IdentityResult> Register(User user);
+    Task<User> SignIn(User user);
 }

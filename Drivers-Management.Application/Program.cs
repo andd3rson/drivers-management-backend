@@ -1,83 +1,35 @@
-using System.Text;
 using Drivers_Management.Application;
-using Drivers_Management.Domain.Contracts.Repository;
-using Drivers_Management.Domain.Contracts.Services;
-using Drivers_Management.Domain.Models;
-using Drivers_Management.Domain.Services;
-using Drivers_Management.Domain.Validators;
+using Drivers_Management.Application.Configurations;
+using Drivers_Management.Application.Middleware;
 using Drivers_Management.Infra.Context;
-using Drivers_Management.Infra.Repository;
-using FluentValidation;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Reflection;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+ConfigureLogging();
+builder.Host.UseSerilog();
+
+var conn = builder.Configuration["ConnectionStrings:Conn"].ToString();
+ServicesExtensionConfigurations.AddConfigurationDbContext(builder.Services, conn);
+
+
+ServicesExtensionConfigurations.AddInversionDependecy(builder.Services);
+
+
+
+
 builder.Services.AddControllers()
     .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-#region Data context
-builder.Services
-       .AddDbContext<DriverManagementDbContext>(
-           optionsAction =>
-           optionsAction.UseSqlServer("Data Source=db_drivers;Initial Catalog=Drivers;user=sa;password=Pass123!;Integrated Security=False;",
-            b => b.MigrationsAssembly("Drivers-Management.Application")
-           ));
-
-builder.Services.AddDefaultIdentity<User>(
-    opt =>
-    {
-        opt.User.RequireUniqueEmail = true;
-    }
-).AddEntityFrameworkStores<DriverManagementDbContext>();
-
-#endregion
-
-builder.Services.AddScoped<UserServices>();
-builder.Services.AddScoped<IValidator<Driver>, DriverValidator>();
-builder.Services.AddScoped<IValidator<Vehicle>, VehicleValidator>();
-builder.Services.AddScoped<IDriverServices, DriverServices>();
-builder.Services.AddScoped<IUserServices, UserServices>();
-
-builder.Services.AddScoped<IVehicleServices, VehicleServices>();
-builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
-builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddSwaggerGen(x =>
-{
-    x.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1",
-        Description = "It's Driver Management documentation. All endpoints is here.",
-        Contact = new OpenApiContact
-        {
-            Name = "Anderson Conceição",
-            Email = "andersonconceiicao@gmail.com"
-        }
-    });
-});
-var key = Encoding.ASCII.GetBytes(Settings.Secret);
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(jwt =>
-{
-    jwt.SaveToken = true;
-    jwt.RequireHttpsMetadata = false;
-    jwt.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateAudience = false,
-        ValidateIssuer = false
 
-    };
-});
+var key = builder.Configuration["SecretKey"];
+builder.Services.Configure<Settings>(opt => opt.SecretKey = key);
+ServicesExtensionConfigurations.AddConfigurationAuth(builder.Services, key);
 
 
 var app = builder.Build();
@@ -87,25 +39,48 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var context = services.GetRequiredService<DriverManagementDbContext>();
+
+
     if (context.Database.GetPendingMigrations().Any())
     {
         context.Database.Migrate();
     }
 }
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<GlobalErrorExceptions>();
 app.MapControllers();
-
-
 app.Run();
+
+
+void ConfigureLogging()
+{
+    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!;
+    var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile(
+            $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+            optional: true)
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .WriteTo.Debug()
+        .WriteTo.Console()
+        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
+        .Enrich.WithProperty("Environment", environment)
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
+ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment) => new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]))
+{
+    AutoRegisterTemplate = true,
+    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName()?.Name?.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+};

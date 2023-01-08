@@ -23,16 +23,22 @@
     data persistence in a relational database. All transactions must be authenticated
 
 
-### Packages
+### Packages used
 
 * Entity Framework Core
   * Identity
   * SqlServer
+* Fluent Validation
 * AutoMapper
-* Fluent Validator
+* Serilog
+* ElasticSearch
+* Kibana
+* Swagger
+* User Secrets
 * NewtonSoft
 * Fluent Assertions
 * NSubstitute
+
 
 
 ### How to run 

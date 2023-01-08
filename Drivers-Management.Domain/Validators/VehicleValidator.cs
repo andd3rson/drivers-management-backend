@@ -19,13 +19,9 @@ namespace Drivers_Management.Domain.Validators
                 .Must(isValidYear);
 
         }
-
-        // TODO: 
         private bool isValidYear(string year)
-        {
-            return true;
-        }
+            => int.Parse(year) > 1950;
+        
 
-      
     }
 }

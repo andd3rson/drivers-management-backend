@@ -31,12 +31,6 @@ namespace Drivers_Management.Application.Controllers
                 _mapper.Map<VehiclesResponse>(await _vehicleServices.GetByPlateAsync(plate))
                 );
 
-        /* TODO : Returns a list of element's find. 
-        [HttpGet("filter")]
-        public async Task<IActionResult> GetAdvancedFilterAsync()
-            => Ok(await _vehicleServices.GetByAdvancedFilterAsync());
-        */
-
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] VehiclesRequest vehicle)
         {

@@ -23,7 +23,7 @@ namespace Drivers_Management.Domain.Services
             pageNumber = pageNumber < 1 ? 1 : pageNumber;
             return await _drivers.GetAllAsync(pageSize, pageNumber);
         }
-        public async Task<Driver> GetByCpfAsync(string cpf)
+        public async Task<IEnumerable<Driver>> GetByCpfAsync(string cpf)
         {
             return await _drivers.GetByCpfAsync(cpf);
         }
@@ -46,7 +46,7 @@ namespace Drivers_Management.Domain.Services
             if(!validateModel.IsValid)
                 return false;
 
-            var exists = await _drivers.GetByCpfAsync(driver.Cpf);
+            var exists = await _drivers.GetByIdAsync(driver.Id);
 
             if (exists is null)
                 return false;
