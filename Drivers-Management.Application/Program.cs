@@ -4,11 +4,14 @@ using Drivers_Management.Application.Middleware;
 using Drivers_Management.Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers()
-    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+ConfigureLogging();
+builder.Host.UseSerilog();
 
 var conn = builder.Configuration["ConnectionStrings:Conn"].ToString();
 ServicesExtensionConfigurations.AddConfigurationDbContext(builder.Services, conn);
@@ -16,6 +19,11 @@ ServicesExtensionConfigurations.AddConfigurationDbContext(builder.Services, conn
 
 ServicesExtensionConfigurations.AddInversionDependecy(builder.Services);
 
+
+
+
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 builder.Services.AddEndpointsApiExplorer();
 
 
@@ -23,9 +31,6 @@ var key = builder.Configuration["SecretKey"];
 builder.Services.Configure<Settings>(opt => opt.SecretKey = key);
 ServicesExtensionConfigurations.AddConfigurationAuth(builder.Services, key);
 
-
-builder.Host.UseSerilog((ctx, lc) => lc
-    .WriteTo.Console());
 
 var app = builder.Build();
 
@@ -52,3 +57,30 @@ app.UseAuthorization();
 app.UseMiddleware<GlobalErrorExceptions>();
 app.MapControllers();
 app.Run();
+
+
+void ConfigureLogging()
+{
+    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")!;
+    var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile(
+            $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+            optional: true)
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+        .Enrich.WithMachineName()
+        .WriteTo.Debug()
+        .WriteTo.Console()
+        .WriteTo.Elasticsearch(ConfigureElasticSink(configuration, environment))
+        .Enrich.WithProperty("Environment", environment)
+        .ReadFrom.Configuration(configuration)
+        .CreateLogger();
+}
+ElasticsearchSinkOptions ConfigureElasticSink(IConfigurationRoot configuration, string environment) => new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]))
+{
+    AutoRegisterTemplate = true,
+    IndexFormat = $"{Assembly.GetExecutingAssembly().GetName()?.Name?.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+};
