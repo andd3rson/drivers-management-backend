@@ -33,7 +33,6 @@ namespace Drivers_Management.Domain.Services
             return await _vehicle.GetAllAsync(pageSize, pageNumber);
         }
 
-        // Todo: Add return list error if something wrong happens
         public async Task<(Vehicle, bool)> CreateAsync(Vehicle vehicle)
         {
             var validateModel = await _validator.ValidateAsync(vehicle);
@@ -54,10 +53,6 @@ namespace Drivers_Management.Domain.Services
             return await _vehicle.UpdateAsync(exists);
         }
 
-        // TODO: 
-        public Task<IEnumerable<Vehicle>> GetByAdvancedFilterAsync()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
