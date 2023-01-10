@@ -19,9 +19,13 @@ namespace Drivers_Management.Domain.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<IEnumerable<Driver>> GetAllAsync(PaginationFilter pagination)
+        public async Task<(IEnumerable<Driver>, int)> GetAllAsync(PaginationFilter pagination)
         {
-            return await _drivers.GetAllAsync(pagination.PageSize, pagination.PageNumber);
+            var res =  await _drivers.GetAllAsync(pagination.PageSize, pagination.PageNumber);
+            var countedPage = await _drivers.CountAsync();
+          
+            
+            return (res, countedPage);
         }
         public async Task<IEnumerable<Driver>> GetByCpfAsync(string cpf)
         {

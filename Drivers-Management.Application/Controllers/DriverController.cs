@@ -3,6 +3,7 @@ using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
 using Drivers_Management.Application.Dtos;
 using AutoMapper;
+using Drivers_Management.Application.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Drivers_Management.Domain.Utils;
 
@@ -15,18 +16,24 @@ namespace Drivers_Management.Application.Controllers
     {
         private readonly IDriverServices _driverServices;
         private readonly IMapper _mapper;
-        public DriverController(IDriverServices driverServices, IMapper mapper)
+        private IUriServices _uriServices;
+        public DriverController(IDriverServices driverServices, IMapper mapper, IUriServices uriServices)
         {
             _driverServices = driverServices;
             _mapper = mapper;
+            _uriServices = uriServices;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetAsync([FromQuery] PaginationQuery pagination)
         {
-            var res = await _driverServices.GetAllAsync(_mapper.Map<PaginationFilter>(pagination));
-            return Ok(_mapper.Map<IEnumerable<DriverResponse>>(res));
+            var paginationFilter = _mapper.Map<PaginationFilter>(pagination);
+            var res = await _driverServices.GetAllAsync(paginationFilter);
+            var pagedReponse = PaginationHelpers
+                .CreatePagedReponse<Driver>(res.Item1.ToList(), paginationFilter, res.Item2, _uriServices, Request.Path.Value);
+            // return Ok(_mapper.Map<IEnumerable<DriverResponse>>(res));
+            return Ok(pagedReponse);
         }
 
 

@@ -1,6 +1,7 @@
 using Drivers_Management.Domain.Contracts.Repository;
 using Drivers_Management.Domain.Models;
 using Drivers_Management.Domain.Services;
+using Drivers_Management.Domain.Utils;
 using Drivers_Management.Tests.Fakers;
 using FluentAssertions;
 using FluentValidation;
@@ -56,10 +57,14 @@ namespace Drivers_Management.Tests.Units.Domain.Services
         {
             //Given
             var sut = new DriverServices(_driverRepository, _validator, null);
+            var paginationFilter = new PaginationFilter()
+            {
+                PageNumber = 1, PageSize = 10
+            };
             //When
-            var response = await sut.GetAllAsync(1, 10);
+            var response = await sut.GetAllAsync(paginationFilter);
             //Then
-            response.Count().Should().Be(0);
+            response.Item1.Count().Should().Be(0);
 
         }
 
@@ -74,10 +79,14 @@ namespace Drivers_Management.Tests.Units.Domain.Services
             _driverRepository.GetAllAsync(takes, Arg.Any<int>())
                             .Returns(DriversFakers.listDrivers().Take(takes));
             var sut = new DriverServices(_driverRepository, _validator, null);
+            var paginationFilter = new PaginationFilter()
+            {
+                PageNumber = 1, PageSize = takes
+            };
             //When
-            var response = await sut.GetAllAsync(1, takes);
+            var response = await sut.GetAllAsync(paginationFilter);
             //Then
-            response.Count().Should().Be(takes);
+            response.Item1.Count().Should().Be(takes);
         }
 
 

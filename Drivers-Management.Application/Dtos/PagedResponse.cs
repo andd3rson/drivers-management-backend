@@ -6,10 +6,10 @@ namespace Drivers_Management.Application.Dtos
         public int PageSize { get; set; }
         public int TotalPages { get; set; }
         public int TotalRecords { get; set; }
-        public Uri NextPage { get; set; }
+        public Uri? NextPage { get; set; }
         public Uri FirstPage { get; set; }
         public Uri LastPage { get; set; }
-        public Uri PreviousPage { get; set; }
+        public Uri? PreviousPage { get; set; }
         public PagedResponse(T data, int pageNumber, int pageSize)
         {
             Data = data;
