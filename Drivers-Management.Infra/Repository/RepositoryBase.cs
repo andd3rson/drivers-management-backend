@@ -21,7 +21,7 @@ namespace Drivers_Management.Infra.Repository
             return entity;
         }
 
-  
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
@@ -32,5 +32,7 @@ namespace Drivers_Management.Infra.Repository
             _context.Set<T>().Update(entity);
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<int> CountAsync()
+            => await _context.Set<T>().CountAsync();
     }
 }

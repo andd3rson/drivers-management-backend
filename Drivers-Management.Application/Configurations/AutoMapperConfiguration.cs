@@ -2,6 +2,7 @@ using AutoMapper;
 using Drivers_Management.Application.Controllers;
 using Drivers_Management.Application.Dtos;
 using Drivers_Management.Domain.Models;
+using Drivers_Management.Domain.Utils;
 
 namespace Drivers_Management.Application.Configurations
 {
@@ -32,6 +33,9 @@ namespace Drivers_Management.Application.Configurations
                 .ForMember(dest => dest.UserName, o => o.MapFrom(x => x.Email))
                 .ForMember(dest => dest.Email, o => o.MapFrom(x => x.Email))
                 .ForMember(dest => dest.PasswordHash, o => o.MapFrom(x => x.Password));
+
+            CreateMap<PaginationQuery, PaginationFilter>().ReverseMap();
+
         }
     }
 }

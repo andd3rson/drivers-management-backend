@@ -1,6 +1,7 @@
 using Drivers_Management.Domain.Contracts.Repository;
 using Drivers_Management.Domain.Contracts.Services;
 using Drivers_Management.Domain.Models;
+using Drivers_Management.Domain.Utils;
 using FluentValidation;
 
 namespace Drivers_Management.Domain.Services
@@ -18,10 +19,9 @@ namespace Drivers_Management.Domain.Services
             _vehicleRepository = vehicleRepository;
         }
 
-        public async Task<IEnumerable<Driver>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<IEnumerable<Driver>> GetAllAsync(PaginationFilter pagination)
         {
-            pageNumber = pageNumber < 1 ? 1 : pageNumber;
-            return await _drivers.GetAllAsync(pageSize, pageNumber);
+            return await _drivers.GetAllAsync(pagination.PageSize, pagination.PageNumber);
         }
         public async Task<IEnumerable<Driver>> GetByCpfAsync(string cpf)
         {

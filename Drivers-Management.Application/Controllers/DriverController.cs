@@ -4,6 +4,7 @@ using Drivers_Management.Domain.Models;
 using Drivers_Management.Application.Dtos;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Drivers_Management.Domain.Utils;
 
 namespace Drivers_Management.Application.Controllers
 {
@@ -20,18 +21,24 @@ namespace Drivers_Management.Application.Controllers
             _mapper = mapper;
         }
 
-        // TODO: Create a Custom page response for every class.
+
         [HttpGet]
-        public async Task<IActionResult> GetAsync([FromQuery] int pageSize = 50, [FromQuery] int pageNumber = 1)
-            => Ok(_mapper.Map<IEnumerable<DriverResponse>>(await _driverServices.GetAllAsync(pageNumber, pageSize)));
+        public async Task<IActionResult> GetAsync([FromQuery] PaginationQuery pagination)
+        {
+            var res = await _driverServices.GetAllAsync(_mapper.Map<PaginationFilter>(pagination));
+            return Ok(_mapper.Map<IEnumerable<DriverResponse>>(res));
+        }
 
 
 
+        // TODO: Changed to filter cpf or name;
         [HttpGet("{cpf}")]
-        public async Task<IActionResult> GetByCpfAsync(string cpf)
+        public async Task<IActionResult> GetFilterByCpfAsync(string cpf)
         {
             var result = await _driverServices.GetByCpfAsync(cpf);
-            return Ok(_mapper.Map<DriverResponse>(result));
+            return Ok(
+                new ApiResponse<IEnumerable<DriverResponse>>(
+                    _mapper.Map<IEnumerable<DriverResponse>>(result)));
         }
 
 
